@@ -50,19 +50,8 @@ app.get("/all-foods", async (req, res) => {
     query.foodName = { $regex: search, $options: "i" };
   }
 
-  let sortOrder = {};
-  if (sort === "asc") {
-    sortOrder = {
-      expireDate: 1,
-    };
-  } else if (sort === "dsc") {
-    sortOrder = {
-      expireDate: -1,
-    };
-  }
-
   try {
-    const foods = await foodCollection.find(query).sort(sortOrder).toArray();
+    const foods = await foodCollection.find(query).toArray();
     if (sort === "asc") {
       foods.sort((a, b) =>
         compareAsc(new Date(a.expireDate), new Date(b.expireDate))
@@ -83,6 +72,16 @@ app.get("/all-foods", async (req, res) => {
 //get all food data databases
 app.get("/foods", async (req, res) => {
   const foods = await foodCollection.find().toArray();
+  res.send(foods);
+});
+
+//get Featured food data databases by hight quantity
+app.get("/featured-foods", async (req, res) => {
+  const foods = await foodCollection
+    .find({ status: "Available" })
+    .sort({ foodQuantity: -1 })
+    .limit(6)
+    .toArray();
   res.send(foods);
 });
 //delete all food databases
