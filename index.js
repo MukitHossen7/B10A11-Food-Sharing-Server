@@ -44,6 +44,22 @@ app.get("/all-foods", async (req, res) => {
   res.send(foods);
 });
 
+//delete all food databases
+app.delete("/all-foods/:id", async (req, res) => {
+  const id = req.params.id;
+  const filter = { _id: new ObjectId(id) };
+  const result = await foodCollection.deleteOne(filter);
+  res.send(result);
+});
+
+// manage my foods by login email
+app.get("/manage-my-foods", async (req, res) => {
+  const email = req.query.email;
+  const query = { "donator.donatorEmail": email };
+  const result = await foodCollection.find(query).sort({ _id: -1 }).toArray();
+  res.send(result);
+});
+
 // get requested food by login user email
 app.get("/request-foods", async (req, res) => {
   const email = req.query.email;
