@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const { connection, client } = require("./DB/MongoDB");
+const { compareAsc, compareDesc } = require("date-fns");
 const { ObjectId } = require("mongodb");
 const app = express();
 const port = process.env.PORT || 5000;
@@ -35,13 +36,48 @@ app.post("/request-foods", async (req, res) => {
   const updateResult = await foodCollection.updateOne(filter, updateDoc);
   res.send(result);
 });
-//get all food available food data databases
+
 app.get("/all-foods", async (req, res) => {
-  const foods = await foodCollection
-    .find({ status: "Available" })
-    .sort({ expireDate: 1 })
-    .toArray();
-  res.send(foods);
+  const { available, search, sort } = req.query;
+
+  let query = {};
+
+  if (available) {
+    query.status = "Available";
+  }
+
+  if (search) {
+    query.foodName = { $regex: search, $options: "i" };
+  }
+
+  let sortOrder = {};
+  if (sort === "asc") {
+    sortOrder = {
+      expireDate: 1,
+    };
+  } else if (sort === "dsc") {
+    sortOrder = {
+      expireDate: -1,
+    };
+  }
+
+  try {
+    const foods = await foodCollection.find(query).sort(sortOrder).toArray();
+    if (sort === "asc") {
+      foods.sort((a, b) =>
+        compareAsc(new Date(a.expireDate), new Date(b.expireDate))
+      );
+    } else if (sort === "dsc") {
+      foods.sort((a, b) =>
+        compareDesc(new Date(a.expireDate), new Date(b.expireDate))
+      );
+    }
+
+    res.send(foods);
+  } catch (error) {
+    console.error("Error fetching foods:", error);
+    res.status(500).send({ message: "Error fetching foods" });
+  }
 });
 
 //get all food data databases
