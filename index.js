@@ -44,6 +44,14 @@ app.get("/all-foods", async (req, res) => {
   res.send(foods);
 });
 
+// get requested food by login user email
+app.get("/request-foods", async (req, res) => {
+  const email = req.query.email;
+  const result = await requestedFoodCollection
+    .find({ user_email: email })
+    .toArray();
+  res.send(result);
+});
 //get single food database use id
 app.get("/all-foods/:id", async (req, res) => {
   const id = req.params.id;
