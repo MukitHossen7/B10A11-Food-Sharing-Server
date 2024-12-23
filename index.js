@@ -35,7 +35,7 @@ app.post("/request-foods", async (req, res) => {
   const updateResult = await foodCollection.updateOne(filter, updateDoc);
   res.send(result);
 });
-//get all food databases
+//get all food available food data databases
 app.get("/all-foods", async (req, res) => {
   const foods = await foodCollection
     .find({ status: "Available" })
@@ -44,11 +44,33 @@ app.get("/all-foods", async (req, res) => {
   res.send(foods);
 });
 
+//get all food data databases
+app.get("/foods", async (req, res) => {
+  const foods = await foodCollection.find().toArray();
+  res.send(foods);
+});
 //delete all food databases
 app.delete("/all-foods/:id", async (req, res) => {
   const id = req.params.id;
   const filter = { _id: new ObjectId(id) };
   const result = await foodCollection.deleteOne(filter);
+  res.send(result);
+});
+app.patch("/all-foods/:id", async (req, res) => {
+  const food = req.body;
+  const id = req.params.id;
+  const filter = { _id: new ObjectId(id) };
+  const updateDoc = {
+    $set: {
+      foodName: food.foodName,
+      foodImg: food.foodImg,
+      foodQuantity: food.foodQuantity,
+      location: food.location,
+      expireDate: food.expireDate,
+      additionalNotes: food.additionalNotes,
+    },
+  };
+  const result = await foodCollection.updateOne(filter, updateDoc);
   res.send(result);
 });
 
