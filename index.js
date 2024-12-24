@@ -11,6 +11,7 @@ const port = process.env.PORT || 5000;
 connection();
 
 //Middleware
+app.use(express.json());
 app.use(
   cors({
     origin: [
@@ -22,7 +23,6 @@ app.use(
     optionsSuccessStatus: 200,
   })
 );
-app.use(express.json());
 app.use(cookieParser());
 
 //Custom middleware
