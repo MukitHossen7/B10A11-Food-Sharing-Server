@@ -13,7 +13,11 @@ connection();
 //Middleware
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: [
+      "http://localhost:5173",
+      "https://food-sharing-bddd1.web.app",
+      "https://food-sharing-bddd1.firebaseapp.com",
+    ],
     credentials: true,
     optionsSuccessStatus: 200,
   })
