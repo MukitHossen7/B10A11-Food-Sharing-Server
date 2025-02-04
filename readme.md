@@ -27,3 +27,27 @@
 - Firebase Authentication (For handling login and registration)
 - TanStack Query (For efficient data fetching and mutations)
 - dotenv (For managing environment variables)
+
+## Installation & Setup
+
+### Clone the Repository
+
+- git clone
+
+### Install Dependencies
+
+- npm install
+
+### Start the Server
+
+- nodemon index.js / npm run dev
+
+## dependencies
+
+- "cookie-parser": "^1.4.7",
+- "cors": "^2.8.5",
+- "date-fns": "^4.1.0",
+- "dotenv": "^16.4.7",
+- "express": "^4.21.2",
+- "jsonwebtoken": "^9.0.2",
+- "mongodb": "^6.12.0"
