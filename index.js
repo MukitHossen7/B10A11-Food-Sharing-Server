@@ -14,7 +14,11 @@ connection();
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://food-sharing-bddd1.web.app"],
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5175",
+      "https://food-sharing-bddd1.web.app",
+    ],
     credentials: true,
     optionsSuccessStatus: 200,
   })
